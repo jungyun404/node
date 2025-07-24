@@ -1,4 +1,3 @@
-
 const express=require('express');
 var util = require('util');
 module.exports=function (){
@@ -9,8 +8,8 @@ module.exports=function (){
         var mysql = require('mysql') ;
         var connection = mysql.createConnection({
             host : 'localhost' ,
-            user : 'root' ,
-            password : 'root' ,
+            user : process.env.DB_USER ,
+            password : process.env.DB_PASSWORD ,
             database : 'daka'
         });
 
@@ -32,8 +31,8 @@ module.exports=function (){
         var mysql = require('mysql') ;
         var connection = mysql.createConnection({
             host : 'localhost' ,
-            user : 'root' ,
-            password : 'root' ,
+            user : process.env.DB_USER ,
+            password : process.env.DB_PASSWORD ,
             database : 'daka'
         });
 
@@ -56,8 +55,8 @@ module.exports=function (){
         var mysql = require('mysql') ;
         var connection = mysql.createConnection({
             host : 'localhost' ,
-            user : 'root' ,
-            password : 'root' ,
+            user : process.env.DB_USER ,
+            password : process.env.DB_PASSWORD ,
             database : 'daka'
         });
 
