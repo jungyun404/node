@@ -10,7 +10,11 @@ const cookieParser=require('cookie-parser');
 const cookieSession=require('cookie-session');
 const expressRoute=require('express-route');
 const consolidate = require('consolidate');
+const helmet = require('helmet');  // Added helmet for security
+const csrf = require('csurf');     // Added csurf for CSRF protection
 
+// Use helmet to secure Express apps by setting various HTTP headers
+server.use(helmet());
 
 // 监听端口
 server.listen(80,function () {
@@ -18,7 +22,7 @@ server.listen(80,function () {
 });  // 监听端口号
 
 //1.解析cookie
-server.use(cookieParser('sdfasl43kjoifguokn4lkhoifo4k3'));
+server.use(cookieParser(process.env.COOKIE_SECRET || 'defaultSecret')); // Use environment variable for secret
 
 //2.使用session
 var arr=[];
@@ -31,12 +35,13 @@ server.use(cookieSession({name: 'zns_sess_id', keys: arr, maxAge: 20*3600*1000})
 server.use(bodyParser.urlencoded({extended: false}));
 server.use(multer({dest: './static/upload'}).any());
 
+// CSRF protection
+server.use(csrf());
 
 // 配置视图
 server.set('view engine','html');
 server.set('views','./src/views');
 server.engine('html',consolidate.ejs);
-
 
 // 配置路由
 server.use('/',require('./dao/admin')());
@@ -45,9 +50,7 @@ server.use('/login/',require('./dao/dao')());
 // 配置静态资源目录
 server.use(express.static(path.join(__dirname,'/src/views')));  // 配置静态资源路径 -相当于省略 /src/staticPublic 路径 - 如果你的静态资源存放在多个目录下面，你可以多次调用 express.static 中间件：
 
-
 // 路由未路由到的
 server.use('*',function (req,res) {
     res.send('没找到');
 });
-
